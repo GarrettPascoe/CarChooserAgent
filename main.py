@@ -4,8 +4,18 @@ from schemas.schemas import *
 from memory.Memory import *
 import shutil
 from ml.ImageClassifierModel import predict_image
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# setting up CORS for image submissions from frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://www.garrettpascoe.com/"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Message(BaseModel):
     type: str
