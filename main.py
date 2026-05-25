@@ -1,7 +1,9 @@
-from fastapi import FastAPI
-from CarChooserAIScript import *
-from schemas import *
-from Memory import *
+from fastapi import FastAPI, UploadFile, File
+from agents.CarChooserAIScript import *
+from schemas.schemas import *
+from memory.Memory import *
+import shutil
+from ml.ImageClassifierModel import predict_image
 
 app = FastAPI()
 
@@ -12,6 +14,8 @@ class Message(BaseModel):
 class AgentRequest(BaseModel):
     messages: list[Message]
     session_id: str
+    
+# CarChooserAgent Section
 
 @app.post("/run-agent", response_model=BotResponse)
 async def run_agent_endpoint(payload: AgentRequest):
@@ -36,3 +40,17 @@ async def run_agent_endpoint(payload: AgentRequest):
 async def create_session():
     session_id = memory_store.create_session()
     return {"session_id": session_id}
+
+# Image Classifier Section
+
+@app.post("/classify-image")
+async def classify_image(file: UploadFile = File(...)):
+
+    temp_path = f"temp_{file.filename}"
+
+    with open(temp_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    prediction = predict_image(temp_path)
+
+    return {"prediction": prediction}
