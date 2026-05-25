@@ -5,6 +5,7 @@ from memory.Memory import *
 import shutil
 from ml.ImageClassifierModel import predict_image
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
@@ -62,5 +63,7 @@ async def classify_image(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
 
     prediction = predict_image(temp_path)
+    
+    os.remove(temp_path)
 
     return {"prediction": prediction}
