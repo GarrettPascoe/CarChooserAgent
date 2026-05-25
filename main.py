@@ -12,7 +12,8 @@ app = FastAPI()
 # setting up CORS for image submissions from frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://www.garrettpascoe.com/"],
+    allow_origins=["https://www.garrettpascoe.com/", 
+                   "https://garrettpascoe.com/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
