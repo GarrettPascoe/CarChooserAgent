@@ -79,7 +79,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 net = Net().to(device)
 
-PATH = "./classification_model1.pth"
+PATH = "classification_model1.pth"
 
 net.load_state_dict(torch.load(PATH, map_location=device))
 
